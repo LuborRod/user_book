@@ -1,0 +1,52 @@
+version: "3.7"
+services:
+  nginx:
+    build:
+      context: docker/nginx
+    ports:
+      - "8888:80"
+    volumes:
+      - ./:/app
+    depends_on:
+      - php-fpm
+    networks:
+      - default
+
+  php-fpm:
+    build:
+      context: docker/php-fpm
+    volumes:
+      - ./:/app
+    depends_on:
+      - db
+    networks:
+      - default
+
+  php-cli:
+    build:
+      context: docker/php-cli
+    volumes:
+      - ./:/app
+    depends_on:
+      - db
+    networks:
+      - default
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=pass
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=pass
+    volumes:
+      - db-data:/var/lib/postgresql/data/
+    networks:
+      - default
+
+networks:
+  default:
+    driver: bridge
+
+volumes:
+  db-data:
