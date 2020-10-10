@@ -34,6 +34,7 @@ services:
 
   db:
     image: postgres
+    container_name: my-db
     restart: always
     environment:
       - POSTGRES_USER=pass
